@@ -70,7 +70,7 @@ With Truffle we get Built-in smart contract compilation, linking, deployment and
 ```sh
 $ sudo npm install -g truffle
 ```
-    Verify
+ Verify
  ```sh
  $ truffle
 ```
