@@ -46,7 +46,7 @@ $ sudo apt-get install ethereum
  $ geth version
  ```
  
- ## Ganache-cli
+ ### Ganache-CLI
  A command line version of ganache
  Ganache CLI uses ethereumjs to simulate full client behavior
  (Note: TectRPC is changed as ganache under truffle)
@@ -60,3 +60,17 @@ $  npm install -g ganache-cli
  $ ganache-cli
 ```
 It start running and display certain address
+
+### Truffle
+
+Truffle is a development environment, testing framework and asset pipeline for Ethereum
+With Truffle we get Built-in smart contract compilation, linking, deployment and binary management.
+
+ Install using npm package manager
+```sh
+$ sudo npm install -g truffle
+```
+    Verify
+ ```sh
+ $ truffle
+```
