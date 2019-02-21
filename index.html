@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width">
+    <link rel="shortcut icon" type="image/x-icon" href="https://static.codepen.io/assets/favicon/favicon-8ea04875e70c4b0bb41da869e81236e54394d63638a1ef12fa558a4a835f1164.ico">
+    <link rel="mask-icon" type="" href="https://static.codepen.io/assets/favicon/logo-pin-f2d2b6d2c61838f7e76325261b7195c27224080bc099486ddd6dccb469b8e8e6.svg" color="#111">
+    <link rel="stylesheet" href="font-awesome.css">
+    <link href="css.css" rel="stylesheet">
+    <link rel='stylesheet' href='https://use.fontawesome.com/releases/v5.7.0/css/all.css' integrity='sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ' crossorigin='anonymous'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="normalize.css">
+
+    <title>BlockVerifier</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Montserrat';
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+        }
+        
+        ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .nav {
+            position: fixed;
+            z-index: 1;
+            top: 0;
+            left: 0;
+            width: 100px;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+        }
+        
+        .nav__list {
+            display: flex;
+            flex-flow: column wrap;
+            height: 85vh;
+            -webkit-transform: translate(0, -100%);
+            transform: translate(0, -100%);
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        
+        .nav__list--active {
+            -webkit-transform: translate(0, 0);
+            transform: translate(0, 0);
+        }
+        
+        .nav__item {
+            flex: 1;
+            position: relative;
+        }
+        
+        .nav__link {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: absolute;
+            height: 100%;
+            width: 100%;
+            top: 0;
+            left: 0;
+            text-decoration: none;
+            font-size: 24px;
+            background: #2b3033;
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        
+        .nav__link:hover {
+            background: #272b2e;
+        }
+        
+        @media (max-width: 640px) {
+            .nav {
+                width: 70px;
+            }
+            .nav__list {
+                height: 90vh;
+            }
+        }
+        
+        .burger {
+            height: 15vh;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2;
+            background: #2b3033;
+            cursor: pointer;
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        
+        .burger:hover {
+            background: #272b2e;
+        }
+        
+        .burger__patty {
+            position: relative;
+            height: 2px;
+            width: 40px;
+            background: white;
+        }
+        
+        .burger__patty:before {
+            content: "";
+            position: absolute;
+            top: -10px;
+            left: 0;
+            height: 2px;
+            width: 100%;
+            background: white;
+        }
+        
+        .burger__patty:after {
+            content: "";
+            position: absolute;
+            top: 10px;
+            left: 0;
+            height: 2px;
+            width: 100%;
+            background: white;
+        }
+        
+        .burger__patty,
+        .burger__patty:before,
+        .burger__patty:after {
+            will-change: transform;
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        
+        .burger--active .burger__patty {
+            -webkit-transform: rotate(90deg);
+            transform: rotate(90deg);
+        }
+        
+        .burger--active .burger__patty:before {
+            -webkit-transform: rotate(-45deg) translate(-7px, -7px) scaleX(0.7);
+            transform: rotate(-45deg) translate(-7px, -7px) scaleX(0.7);
+        }
+        
+        .burger--active .burger__patty:after {
+            -webkit-transform: rotate(45deg) translate(-7px, 7px) scaleX(0.7);
+            transform: rotate(45deg) translate(-7px, 7px) scaleX(0.7);
+        }
+        
+        @media (max-width: 640px) {
+            .burger {
+                height: 10vh;
+            }
+            .burger__patty {
+                -webkit-transform: scale(0.8);
+                transform: scale(0.8);
+            }
+            .burger--active .burger__patty {
+                -webkit-transform: scale(0.8) rotate(90deg);
+                transform: scale(0.8) rotate(90deg);
+            }
+        }
+        
+        .panel {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        
+        .panel__wrapper {
+            padding: 7vh 7vw;
+            -webkit-perspective: 1000px;
+            perspective: 1000px;
+        }
+        
+        .panel__content {
+            will-change: transform;
+            -webkit-transform: scale(0.7) rotateX(-230deg);
+            transform: scale(0.7) rotateX(-230deg);
+            -webkit-transform-origin: center 80%;
+            transform-origin: center 80%;
+            opacity: 0;
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        
+        .panel__content--active {
+            -webkit-transform: none;
+            transform: none;
+            opacity: 1;
+        }
+        
+        .panel__headline {
+            font-weight: 700;
+            opacity: 0.8;
+            font-size: 48px;
+            margin: 0 0 25px 0;
+        }
+        
+        .panel p {
+            margin: 0 0 25px 0;
+            color: #1a1a1a;
+            font-size: 24px;
+            max-width: 800px;
+        }
+        
+        .panel p:last-child {
+            margin-bottom: 0;
+        }
+        
+        .panel__block {
+            height: 3px;
+            background: rgba(0, 0, 0, 0.2);
+            margin: 0 0 25px 0;
+        }
+        
+        @media (max-width: 640px) {
+            .panel__headline {
+                font-size: 36px;
+            }
+            .panel__wrapper {
+                padding: 10vh 10vw;
+            }
+            .panel p {
+                font-size: 16px;
+            }
+        }
+        
+        .c-blue {
+            color: #5fc7ea;
+        }
+        
+        .c-red {
+            color: #e68568;
+        }
+        
+        .c-green {
+            color: #68e6ac;
+        }
+        
+        .c-yellow {
+            color: #e6d068;
+        }
+        
+        .b-blue {
+            background: #5fc7ea;
+        }
+        
+        .b-red {
+            background: #e68568;
+        }
+        
+        .b-green {
+            background: #68e6ac;
+        }
+        
+        .b-yellow {
+            background: #e6d068;
+        }
+        
+        .logo {
+            position: fixed;
+            bottom: 3vh;
+            right: 3vw;
+            z-index: 2;
+        }
+        
+        .logo img {
+            width: 65px;
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            -webkit-transform: rotate(0);
+            transform: rotate(0);
+        }
+        
+        .logo img:hover {
+            -webkit-transform: rotate(180deg) scale(1.1);
+            transform: rotate(180deg) scale(1.1);
+        }
+        /*for text box*/
+        .form-style-8 {
+            font-family: 'Open Sans Condensed', arial, sans;
+            width: 500px;
+            padding: 30px;
+            background: #FFFFFF;
+            margin: 50px auto;
+            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.22);
+            -moz-box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.22);
+            -webkit-box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.22);
+        }
+        
+        .form-style-8 input[type="text"],
+        .form-style-8 select {
+            box-sizing: border-box;
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            outline: none;
+            display: block;
+            width: 100%;
+            padding: 7px;
+            border: none;
+            border-bottom: 1px solid #ddd;
+            background: transparent;
+            margin-bottom: 10px;
+            font: 16px Arial, Helvetica, sans-serif;
+            height: 45px;
+        }
+        
+        .form-style-8 input[type="button"]:hover,
+        .form-style-8 input[type="submit"]:hover {
+            background: linear-gradient(to bottom, #34CACA 5%, #30C9C9 100%);
+            background-color: #34CACA;
+        }
+        
+        #centerAlign {
+            margin-top: 40px;
+        }
+        
+        .btn1 {
+            border: 2px solid black;
+            background-color: white;
+            color: black;
+            padding: 14px 28px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        
+        .success {
+            background-color: #4CAF50;
+            color: white;
+            border-color: #4CAF50;
+        }
+        
+        .success:hover {
+            border-color: #4CAF50;
+            background: white;
+            color: green;
+        }
+        
+        .info {
+            background: #2196F3;
+            color: white;
+            border-color: #2196F3;
+        }
+        
+        .info:hover {
+            border-color: #2196F3;
+            background: white;
+            color: dodgerblue
+        }
+        /*
+button {
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  opacity: 0.9;
+}
+
+button:hover {
+  opacity:1;
+}
+.clearfix::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+*/
+        /* Extra styles for the cancel button */
+        /*
+.cancelbtn {
+  padding: 14px 20px;
+  background: #2196F3;
+}
+.signupbtn{
+   background-color: #4CAF50;
+}
+/* Float cancel and signup buttons and add an equal width */
+        /*
+.cancelbtn, .signupbtn {
+  float: left;
+  width: 50%;
+}
+*/
+        
+        .upload input[type=text] {
+            padding: 10px;
+            font-size: 17px;
+            border: 1px solid grey;
+            float: left;
+            width: 80%;
+            background: #f1f1f1;
+            border-top-left-radius: 5px;
+            border-bottom-left-radius: 5px;
+        }
+        /* Style the submit button */
+        
+        .upload button {
+            float: left;
+            width: 20%;
+            padding: 10px;
+            background: #F91A1A;
+            color: white;
+            font-size: 17px;
+            border: 1px solid grey;
+            border-left: none;
+            /* Prevent double borders */
+            cursor: pointer;
+            border-top-right-radius: 5px;
+            border-bottom-right-radius: 5px;
+        }
+        
+        .upload button:hover {
+            background: #F53259;
+        }
+        /* Clear floats */
+        
+        .upload::after {
+            content: "";
+            clear: both;
+            display: table;
+        }
+    </style>
+
+    <script>
+        window.console = window.console || function(t) {};
+    </script>
+
+    <script>
+        if (document.location.search.match(/type=embed/gi)) {
+            window.parent.postMessage("resize", "*");
+        }
+    </script>
+
+</head>
+
+<body translate="no">
+
+    <nav class="nav">
+        <div class="burger">
+            <div class="burger__patty"></div>
+        </div>
+
+        <ul class="nav__list">
+            <li class="nav__item">
+                <a href="#1" class="nav__link c-blue"><i style='font-size:24px' class='fas'>&#xf015;</i></a>
+            </li>
+            <li class="nav__item">
+                <a href="#2" class="nav__link c-yellow scrolly"><i style='font-size:24px' class='fas'>&#xf560;</i></a>
+            </li>
+            <li class="nav__item">
+                <a href="#3" class="nav__link c-red"><i style='font-size:24px' class='fas'>&#xf559;</i></a>
+            </li>
+            <li class="nav__item">
+                <a href="#4" class="nav__link c-green"><i style='font-size:24px' class='fas'>&#xf19c;</i></a>
+            </li>
+        </ul>
+    </nav>
+
+    <section class="panel b-blue" id="1">
+        <article class="panel__wrapper">
+            <div class="panel__content panel__content--active">
+                <h1 class="panel__headline"><i style='font-size:48px' class='fas'>&#xf015;</i>&nbsp;Block Verifier</h1>
+                <div class="panel__block"></div>
+                <pre>
+         A Blockchain based Certificate verification with Distributed storage. The certificates will be immutable, confidential and tamperproof.
+
+        By combining 
+
+            BLOCKCHAIN + IPFS + ENCRYPTION = BLOCK VERIFIER
+
+        Combining the multiple technologies and elimination ones draw back with other
+
+        BLOCKCHAIN - Tamperproof
+        IPFS       - Distributed Storage
+        ENCRYPTION - confidentiality
+      </pre>
+                <!--
+  <div class="clearfix">
+      <button type="button" class="cancelbtn">Verify</button>
+      <button type="submit" class="signupbtn">View</button>
+    </div>
+  -->
+            </div>
+        </article>
+    </section>
+    <section class="panel b-yellow" id="2">
+        <article class="panel__wrapper">
+            <div class="panel__content">
+                <h1 class="panel__headline"><i style='font-size:48px' class='fas'>&#xf560;</i>&nbsp;Verify Certificates</h1>
+                <div class="panel__block"></div>
+                <br>
+                <br>
+                <div class="form-style-8">
+                    <form>
+                        <h2>Avalabile certificate Hashes</h3>
+            ba201f3c03eefd833616151d8761ff0a <i style='font-size:24px' class='far'>&#xf0c5;</i> <br>
+            a13f9cbab19278a83b9f7cfc8abe1936 <i style='font-size:24px' class='far'>&#xf0c5;</i> <br>
+            8ccd329bf9af26bfaec382b8c6b9fd71 <i style='font-size:24px' class='far'>&#xf0c5;</i> <br><br><br>
+          <input type="text" name="field2" placeholder="Certificate hash" >
+          <center id="centerAlign"><button class="btn1 success">Verify</button> &nbsp;&nbsp;<button class="btn1 info">View</button> <center>
+        </form>
+    </div>
+    </div>
+  </article>
+</section>
+<section class="panel b-red" id="3">
+  <article class="panel__wrapper">
+    <div class="panel__content">
+      <h1 class="panel__headline"><i style='font-size:48px' class='fas'>&#xf559;</i>&nbsp;View & Share certificates</h1>
+      <div class="panel__block"></div><br><br>
+        <div class="form-style-8">
+
+          <form>
+            <h2>Avalabile certificate Hashes</h3>
+            ba201f3c03eefd833616151d8761ff0a <i style='font-size:24px' class='far'>&#xf0c5;</i> <br>
+            a13f9cbab19278a83b9f7cfc8abe1936 <i style='font-size:24px' class='far'>&#xf0c5;</i> <br>
+            8ccd329bf9af26bfaec382b8c6b9fd71 <i style='font-size:24px' class='far'>&#xf0c5;</i> <br><br><br>
+            <input type="text" name="field2" placeholder="Certificate hash" >
+            <center id="centerAlign"><button class="btn1 success">View</button> &nbsp;&nbsp;<button class="btn1 info">Share</button> <center>
+          </form>
+        </div>
+    </div>
+  </article>
+</section>
+<section class="panel b-green" id="4">
+  <article class="panel__wrapper">
+    <div class="panel__content">
+      <h1 class="panel__headline"><i style='font-size:48px' class='fas'>&#xf19c;</i>&nbsp;Issue certificates</h1>
+      <div class="panel__block"></div>
+      <div class="form-style-8">
+
+            <div class="upload">
+              <input type="text" placeholder="Search.." name="search">
+              <button type="submit"><i style='font-size:24px' class='fas'>&#xf093;</i></button>
+            </div>
+          <form>
+            <center id="centerAlign">
+            <button class="btn1 success">encrypt</button>
+            <input type="text" name="field2" placeholder="Receipient" > 
+             &nbsp;&nbsp;<button class="btn1 info">Send</button> <center>
+          </form>
+        </div>
+    </div>
+  </article>
+</section>
+
+    <script src="stopExecutionOnTimeout-de7e2ef6bfefd24b79a3f68b414b87b8db5b08.js"></script>
+
+  <script src="jquery.js"></script>
+
+    <script>
+      var menu = document.querySelector('.nav__list');
+var burger = document.querySelector('.burger');
+var doc = $(document);
+var l = $('.scrolly');
+var panel = $('.panel');
+var vh = $(window).height();
+
+var openMenu = function() {
+  burger.classList.toggle('burger--active');
+  menu.classList.toggle('nav__list--active');
+};
+
+// reveal content of first panel by default
+panel.eq(0).find('.panel__content').addClass('panel__content--active');
+
+var scrollFx = function() {
+  var ds = doc.scrollTop();
+  var of = vh / 4;
+
+  // if the panel is in the viewport, reveal the content, if not, hide it.
+  for (var i = 0; i < panel.length; i++) {
+    if (panel.eq(i).offset().top < ds+of) {
+     panel
+       .eq(i)
+       .find('.panel__content')
+       .addClass('panel__content--active');
+    } else {
+      panel
+        .eq(i)
+        .find('.panel__content')
+        .removeClass('panel__content--active')
+    }
+  }
+};
+
+var scrolly = function(e) {
+  e.preventDefault();
+  var target = this.hash;
+  var $target = $(target);
+
+  $('html, body').stop().animate({
+      'scrollTop': $target.offset().top
+  }, 300, 'swing', function () {
+      window.location.hash = target;
+  });
+}
+
+var init = function() {
+  burger.addEventListener('click', openMenu, false);
+  window.addEventListener('scroll', scrollFx, false);
+  window.addEventListener('load', scrollFx, false);
+  $('a[href^="#"]').on('click',scrolly);
+};
+
+doc.on('ready', init);
+      //# sourceURL=pen.js
+
+      function adjust_textarea(h) {
+    h.style.height = "20px";
+    h.style.height = (h.scrollHeight)+"px";
+}
+    </script>
+
+  <script src="css_reload-5619dc0905a68b2e6298901de54f73cefe4e079f65a7540685.js"></script>
+
+</body></html>
