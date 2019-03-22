@@ -4,6 +4,7 @@
 <head>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width">
+
     <link rel="shortcut icon" type="image/x-icon" href="https://static.codepen.io/assets/favicon/favicon-8ea04875e70c4b0bb41da869e81236e54394d63638a1ef12fa558a4a835f1164.ico">
     <link rel="mask-icon" type="" href="https://static.codepen.io/assets/favicon/logo-pin-f2d2b6d2c61838f7e76325261b7195c27224080bc099486ddd6dccb469b8e8e6.svg" color="#111">
     <link rel="stylesheet" href="font-awesome.css">
@@ -11,9 +12,7 @@
     <link rel='stylesheet' href='https://use.fontawesome.com/releases/v5.7.0/css/all.css' integrity='sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ' crossorigin='anonymous'>
     <link href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="normalize.css">
-
     <title>BlockVerifier</title>
-
     <style>
         * {
             box-sizing: border-box;
@@ -347,7 +346,7 @@
         .info {
             background: #2196F3;
             color: white;
-            border-color: #2196F3;
+            border-color: #2196F3;font: 16px Arial, Helvetica, sans-serif;
         }
         
         .info:hover {
@@ -392,6 +391,7 @@ button:hover {
 }
 */
         
+        
         .upload input[type=text] {
             padding: 10px;
             font-size: 17px;
@@ -429,27 +429,30 @@ button:hover {
             clear: both;
             display: table;
         }
-    </style>
+        .file-upload > input
+        {
+            display: none;
+        }
+        .file-upload img {
+            cursor: pointer;
+        }
 
+    </style>
     <script>
         window.console = window.console || function(t) {};
     </script>
-
     <script>
         if (document.location.search.match(/type=embed/gi)) {
             window.parent.postMessage("resize", "*");
         }
     </script>
-
 </head>
 
 <body translate="no">
-
     <nav class="nav">
         <div class="burger">
             <div class="burger__patty"></div>
         </div>
-
         <ul class="nav__list">
             <li class="nav__item">
                 <a href="#1" class="nav__link c-blue"><i style='font-size:24px' class='fas'>&#xf015;</i></a>
@@ -465,7 +468,6 @@ button:hover {
             </li>
         </ul>
     </nav>
-
     <section class="panel b-blue" id="1">
         <article class="panel__wrapper">
             <div class="panel__content panel__content--active">
@@ -502,126 +504,219 @@ button:hover {
                 <br>
                 <div class="form-style-8">
                     <form>
-                        <h2>Avalabile certificate Hashes</h3>
-            ba201f3c03eefd833616151d8761ff0a <i style='font-size:24px' class='far'>&#xf0c5;</i> <br>
-            a13f9cbab19278a83b9f7cfc8abe1936 <i style='font-size:24px' class='far'>&#xf0c5;</i> <br>
-            8ccd329bf9af26bfaec382b8c6b9fd71 <i style='font-size:24px' class='far'>&#xf0c5;</i> <br><br><br>
-          <input type="text" name="field2" placeholder="Certificate hash" >
-          <center id="centerAlign"><button class="btn1 success">Verify</button> &nbsp;&nbsp;<button class="btn1 info">View</button> <center>
-        </form>
-    </div>
-    </div>
-  </article>
-</section>
-<section class="panel b-red" id="3">
-  <article class="panel__wrapper">
-    <div class="panel__content">
-      <h1 class="panel__headline"><i style='font-size:48px' class='fas'>&#xf559;</i>&nbsp;View & Share certificates</h1>
-      <div class="panel__block"></div><br><br>
-        <div class="form-style-8">
-
-          <form>
-            <h2>Avalabile certificate Hashes</h3>
-            ba201f3c03eefd833616151d8761ff0a <i style='font-size:24px' class='far'>&#xf0c5;</i> <br>
-            a13f9cbab19278a83b9f7cfc8abe1936 <i style='font-size:24px' class='far'>&#xf0c5;</i> <br>
-            8ccd329bf9af26bfaec382b8c6b9fd71 <i style='font-size:24px' class='far'>&#xf0c5;</i> <br><br><br>
-            <input type="text" name="field2" placeholder="Certificate hash" >
-            <center id="centerAlign"><button class="btn1 success">View</button> &nbsp;&nbsp;<button class="btn1 info">Share</button> <center>
-          </form>
-        </div>
-    </div>
-  </article>
-</section>
-<section class="panel b-green" id="4">
-  <article class="panel__wrapper">
-    <div class="panel__content">
-      <h1 class="panel__headline"><i style='font-size:48px' class='fas'>&#xf19c;</i>&nbsp;Issue certificates</h1>
-      <div class="panel__block"></div>
-      <div class="form-style-8">
-
-            <div class="upload">
-              <input type="text" placeholder="Search.." name="search">
-              <button type="submit"><i style='font-size:24px' class='fas'>&#xf093;</i></button>
+                            <center>
+                        <div class="file-upload">
+                        <label style="font: 16px Arial, Helvetica, sans-serif;">Select the file</label>
+                        <label for="file-input">
+                            <img src="upload.png" />
+                        </label>
+                        <input id="file-input" type="file" onchange="upload(this);" />
+                    </div>
+                    </center>
+                            
+                            <center id="centerAlign"><button class="btn1 success">Verify</button> &nbsp;&nbsp;<button class="btn1 info">View</button>
+                            </center>
+                    </form>
+                </div>
             </div>
-          <form>
-            <center id="centerAlign">
-            <button class="btn1 success">encrypt</button>
-            <input type="text" name="field2" placeholder="Receipient" > 
-             &nbsp;&nbsp;<button class="btn1 info">Send</button> <center>
-          </form>
-        </div>
-    </div>
-  </article>
-</section>
-
+        </article>
+    </section>
+    <section class="panel b-red" id="3">
+        <article class="panel__wrapper">
+            <div class="panel__content">
+                <h1 class="panel__headline"><i style='font-size:48px' class='fas'>&#xf559;</i>&nbsp;View & Share certificates</h1>
+                <div class="panel__block"></div><br><br>
+                <div class="form-style-8">
+                    <form>
+                        <h2>Avalabile certificate Hashes</h3>
+                            QmTkMisCsNWkuo2PR2h5qmgc29LVPUhNXoowH8XyxSDZiY <i style='font-size:24px' class='far'>&#xf0c5;</i> <br>
+                            <input type="text" id="certificatehash" placeholder="Certificate hash">
+                            <div style="display: none;" id="out"></div>
+                            
+                            <center id="centerAlign"><button class="btn1 success" onclick="viewCertificate()">View</button> &nbsp;&nbsp;<button class="btn1 info">Share</button><br><br>
+                            <img id="certificate-display">
+                    </form>
+                </div>
+            </div>
+        </article>
+    </section>
+    <section class="panel b-green" id="4">
+        <article class="panel__wrapper">
+            <div class="panel__content">
+                <h1 class="panel__headline"><i style='font-size:48px' class='fas'>&#xf19c;</i>&nbsp;Issue certificates</h1>
+                <div class="panel__block"></div>
+                <div class="form-style-8">
+                    <center>
+                        <div class="file-upload">
+                        <label style="font: 16px Arial, Helvetica, sans-serif;">Select the file</label>
+                        <label for="file-input">
+                            <img src="upload.png" />
+                        </label>
+                        <input id="file-input" type="file" onchange="upload(this);" />
+                    </div>
+                    </center>
+                    
+                    <img id="blah" src="" />
+                    <form>
+                        <center id="centerAlign">
+                            <button class="btn1 success" onclick="encryptFile()">encrypt</button>
+                            <input type="text" name="field2" placeholder="Receipient">
+                            &nbsp;&nbsp;<button class="btn1 info" onclick="uploadToIpfs()">Send</button>
+                            <center>
+                    </form>
+                </div>
+            </div>
+        </article>
+    </section>
     <script src="stopExecutionOnTimeout-de7e2ef6bfefd24b79a3f68b414b87b8db5b08.js"></script>
-
-  <script src="jquery.js"></script>
-
+    <script src="jquery.js"></script>
     <script>
-      var menu = document.querySelector('.nav__list');
-var burger = document.querySelector('.burger');
-var doc = $(document);
-var l = $('.scrolly');
-var panel = $('.panel');
-var vh = $(window).height();
+    var menu = document.querySelector('.nav__list');
+    var burger = document.querySelector('.burger');
+    var doc = $(document);
+    var l = $('.scrolly');
+    var panel = $('.panel');
+    var vh = $(window).height();
+    var encrypted;
+    var openMenu = function() {
+        burger.classList.toggle('burger--active');
+        menu.classList.toggle('nav__list--active');
+    };
 
-var openMenu = function() {
-  burger.classList.toggle('burger--active');
-  menu.classList.toggle('nav__list--active');
-};
+    // reveal content of first panel by default
+    panel.eq(0).find('.panel__content').addClass('panel__content--active');
 
-// reveal content of first panel by default
-panel.eq(0).find('.panel__content').addClass('panel__content--active');
+    var scrollFx = function() {
+        var ds = doc.scrollTop();
+        var of = vh / 4;
 
-var scrollFx = function() {
-  var ds = doc.scrollTop();
-  var of = vh / 4;
+        // if the panel is in the viewport, reveal the content, if not, hide it.
+        for (var i = 0; i < panel.length; i++) {
+            if (panel.eq(i).offset().top < ds + of ) {
+                panel
+                    .eq(i)
+                    .find('.panel__content')
+                    .addClass('panel__content--active');
+            } else {
+                panel
+                    .eq(i)
+                    .find('.panel__content')
+                    .removeClass('panel__content--active')
+            }
+        }
+    };
 
-  // if the panel is in the viewport, reveal the content, if not, hide it.
-  for (var i = 0; i < panel.length; i++) {
-    if (panel.eq(i).offset().top < ds+of) {
-     panel
-       .eq(i)
-       .find('.panel__content')
-       .addClass('panel__content--active');
-    } else {
-      panel
-        .eq(i)
-        .find('.panel__content')
-        .removeClass('panel__content--active')
+    var scrolly = function(e) {
+        e.preventDefault();
+        var target = this.hash;
+        var $target = $(target);
+
+        $('html, body').stop().animate({
+            'scrollTop': $target.offset().top
+        }, 300, 'swing', function() {
+            window.location.hash = target;
+        });
     }
-  }
-};
 
-var scrolly = function(e) {
-  e.preventDefault();
-  var target = this.hash;
-  var $target = $(target);
+    var init = function() {
+        burger.addEventListener('click', openMenu, false);
+        window.addEventListener('scroll', scrollFx, false);
+        window.addEventListener('load', scrollFx, false);
+        $('a[href^="#"]').on('click', scrolly);
+    };
 
-  $('html, body').stop().animate({
-      'scrollTop': $target.offset().top
-  }, 300, 'swing', function () {
-      window.location.hash = target;
-  });
-}
+    doc.on('ready', init);
+    //# sourceURL=pen.js
 
-var init = function() {
-  burger.addEventListener('click', openMenu, false);
-  window.addEventListener('scroll', scrollFx, false);
-  window.addEventListener('load', scrollFx, false);
-  $('a[href^="#"]').on('click',scrolly);
-};
+    function adjust_textarea(h) {
+        h.style.height = "20px";
+        h.style.height = (h.scrollHeight) + "px";
+    }
 
-doc.on('ready', init);
-      //# sourceURL=pen.js
+    function uploadToIpfs() {
 
-      function adjust_textarea(h) {
-    h.style.height = "20px";
-    h.style.height = (h.scrollHeight)+"px";
-}
+        const ipfs = window.IpfsApi('localhost', 5001); // Connect to IPFS
+        const buf = buffer.Buffer(encrypted); // Convert data into buffer
+        ipfs.files.add(buf, (err, result) => { // Upload buffer to IPFS
+            if (err) {
+                console.error(err);
+                return;
+            }
+            let url = `https://ipfs.io/ipfs/${result[0].hash}`;
+            console.log(`Url --> ${url}`);
+        })
+    }
+
+    function upload(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function(e) {
+                $('#blah')
+                    .attr('src', e.target.result)
+                    .width(400)
+                    .height(200);
+            };
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    function viewCertificate() {
+        console.log("View certificate call");
+        getPageContentFromUrl("http://127.0.0.1:8080/ipfs/" + document.getElementById("certificatehash").value);
+
+        console.log("getting html page content");
+        decryptFile();
+
+    }
+
+    function encryptFile() {
+        const reader = new FileReader();
+        //function executed when reader finish loading file
+        reader.onload = function() {
+            // Use the CryptoJS library and the AES to encrypt contents of the file
+
+            encrypted = CryptoJS.AES.encrypt(reader.result, "Helloall").toString();
+            console.log("encryption Done");
+
+        };
+        const photo = document.getElementById("file-input");
+        reader.readAsDataURL(photo.files[0]); // Read Provided File
+    }
+
+    function decryptFile() {
+        // Use the CryptoJS library and the AES to decrypt contents of the file
+
+        var decrypted = CryptoJS.AES.decrypt(document.getElementById("out").innerHTML, "Helloall").toString(CryptoJS.enc.Latin1);
+        console.log("decryption Done");
+         $('#certificate-display')
+                    .attr('src', decrypted)
+                    .width(400)
+                    .height(200);
+    }
+
+    function getPageContentFromUrl(url) {
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                document.getElementById("out").innerHTML = this.responseText;
+            }
+        };
+        xhttp.open("GET", url, true);
+        xhttp.send();
+    }
+
+    function copyContent() {
+        var copyText = document.getElementById("");
+        copyText.select();
+        document.execCommand("copy");
+    }
     </script>
+    <script src="css_reload-5619dc0905a68b2e6298901de54f73cefe4e079f65a7540685.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/aes.js"></script>
+    <script src="https://wzrd.in/standalone/buffer"></script>
+    <script src="https://unpkg.com/ipfs-api@9.0.0/dist/index.js" integrity="sha384-5bXRcW9kyxxnSMbOoHzraqa7Z0PQWIao+cgeg327zit1hz5LZCEbIMx/LWKPReuB" crossorigin="anonymous"></script>
+</body>
 
-  <script src="css_reload-5619dc0905a68b2e6298901de54f73cefe4e079f65a7540685.js"></script>
-
-</body></html>
+</html>
