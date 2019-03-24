@@ -12,6 +12,9 @@
     <link rel='stylesheet' href='https://use.fontawesome.com/releases/v5.7.0/css/all.css' integrity='sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ' crossorigin='anonymous'>
     <link href='http://fonts.googleapis.com/css?family=Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="normalize.css">
+
+    <!-- web3.js 1.0.0 -->
+    <script src="https://cdn.jsdelivr.net/gh/ethereum/web3.js@1.0.0-beta.36/dist/web3.min.js" integrity="sha256-nWBTbvxhJgjslRyuAKJHK+XcZPlCnmIAAMixz6EefVk=" crossorigin="anonymous"></script>
     <title>BlockVerifier</title>
     <style>
         * {
@@ -83,7 +86,8 @@
                 width: 70px;
             }
             .nav__list {
-                height: 90vh;
+                height: 90vh;{"receiver":{"name":"nilavann","course":"block verifier","date":,"token":2345678},"issuer":{"name":"Block verifier","encryptedName":"U2FsdGVkX1+PU3CztS+e78jedCLlBZcFxju5oQ8Oa1M="}}
+
             }
         }
         
@@ -354,43 +358,6 @@
             background: white;
             color: dodgerblue
         }
-        /*
-button {
-  color: white;
-  padding: 14px 20px;
-  margin: 8px 0;
-  border: none;
-  cursor: pointer;
-  width: 100%;
-  opacity: 0.9;
-}
-
-button:hover {
-  opacity:1;
-}
-.clearfix::after {
-  content: "";
-  clear: both;
-  display: table;
-}
-*/
-        /* Extra styles for the cancel button */
-        /*
-.cancelbtn {
-  padding: 14px 20px;
-  background: #2196F3;
-}
-.signupbtn{
-   background-color: #4CAF50;
-}
-/* Float cancel and signup buttons and add an equal width */
-        /*
-.cancelbtn, .signupbtn {
-  float: left;
-  width: 50%;
-}
-*/
-        
         
         .upload input[type=text] {
             padding: 10px;
@@ -486,12 +453,7 @@ button:hover {
         IPFS       - Distributed Storage
         ENCRYPTION - confidentiality
       </pre>
-                <!--
-  <div class="clearfix">
-      <button type="button" class="cancelbtn">Verify</button>
-      <button type="submit" class="signupbtn">View</button>
-    </div>
-  -->
+
             </div>
         </article>
     </section>
@@ -514,7 +476,8 @@ button:hover {
                     </div>
                     </center>
                             
-                            <center id="centerAlign"><button class="btn1 success">Verify</button> &nbsp;&nbsp;<button class="btn1 info">View</button>
+                            <center id="centerAlign"><button onclick="fileHashing()" class="btn1 success">Get Hash</button> &nbsp;&nbsp;<button onclick="checkCertificate()"  class="btn1 info">Verify</button>
+                                <div id="certStatus" style='font-size:48px;font-weight: bold;'></div>
                             </center>
                     </form>
                 </div>
@@ -529,12 +492,13 @@ button:hover {
                 <div class="form-style-8">
                     <form>
                         <h2>Avalabile certificate Hashes</h3>
-                            QmTkMisCsNWkuo2PR2h5qmgc29LVPUhNXoowH8XyxSDZiY <i style='font-size:24px' class='far'>&#xf0c5;</i> <br>
+                            QmRHG3n1EdswuQzdFaXoFx7XQ3ze3aigXCSshGm21xv6LQ <i style='font-size:24px' class='far'>&#xf0c5;</i> <br>
+                            <textarea id="privateKeyRecepient"vrows="6" cols="30" name="privatekey" placeholder="Receipient privatekey"></textarea>
                             <input type="text" id="certificatehash" placeholder="Certificate hash">
                             <div style="display: none;" id="out"></div>
                             
-                            <center id="centerAlign"><button class="btn1 success" onclick="viewCertificate()">View</button> &nbsp;&nbsp;<button class="btn1 info">Share</button><br><br>
-                            <img id="certificate-display">
+                            <center id="centerAlign"><button class="btn1 success" onclick="viewCertificate()">get Certificate</button> &nbsp;&nbsp;<!--<button onclick="displaycert()"> Display</button>--><br><br>
+                            <p style=" height: 60px; width: 60px;font-size:24px;"id="certificate-display"></p>
                     </form>
                 </div>
             </div>
@@ -556,21 +520,30 @@ button:hover {
                     </div>
                     </center>
                     
-                    <img id="blah" src="" />
+                    <div id="details" style="display: none;">
+                        <label>Name </label>:<label id="nameRecipient"></label>
+                        <label>Date </label>:<label id="providedDate"></label>
+                        <label>By </label>:<label id="Issuer name"></label>
+                    </div>
                     <form>
                         <center id="centerAlign">
-                            <button class="btn1 success" onclick="encryptFile()">encrypt</button>
-                            <input type="text" name="field2" placeholder="Receipient">
-                            &nbsp;&nbsp;<button class="btn1 info" onclick="uploadToIpfs()">Send</button>
+                            <textarea id="publicKeyRecepient"vrows="6" cols="30" name="publickey" placeholder="Receipientpublickey"></textarea>
+                            <button class="btn1 success" onclick="encryptFile()">encrypt</button> <br><br>
+                            <button class="btn1 info" onclick="uploadToIpfs()">Add to ipfs</button>
+                            <input type="text" name="field2" placeholder="Receipient" id="recipientAddress">
+                            
+                            &nbsp;&nbsp;<button class="btn1 info" onclick="registerCertificate()">Send</button>
                             <center>
+                            <p id="encert" style="display: none;"></p>
                     </form>
                 </div>
             </div>
         </article>
     </section>
     <script src="stopExecutionOnTimeout-de7e2ef6bfefd24b79a3f68b414b87b8db5b08.js"></script>
-    <script src="jquery.js"></script>
+    <script src="jquery.js"></script> 
     <script>
+
     var menu = document.querySelector('.nav__list');
     var burger = document.querySelector('.burger');
     var doc = $(document);
@@ -583,8 +556,8 @@ button:hover {
         menu.classList.toggle('nav__list--active');
     };
 
-    // reveal content of first panel by default
-    panel.eq(0).find('.panel__content').addClass('panel__content--active');
+      // reveal content of first panel by default
+    //panel.eq(0).find('.panel__content').addClass('panel__content--active');
 
     var scrollFx = function() {
         var ds = doc.scrollTop();
@@ -606,7 +579,39 @@ button:hover {
         }
     };
 
-    var scrolly = function(e) {
+    function adjust_textarea(h) {
+        h.style.height = "20px";
+        h.style.height = (h.scrollHeight) + "px";
+    }
+
+
+
+    function copyContent() {
+        var copyText = document.getElementById("");
+        copyText.select();
+        document.execCommand("copy");
+    }
+
+
+    function upload(input) {
+        /**
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function(e) {
+                //var obj = JSON.parse( reader.result);
+                //document.getElementById("nameRecipient").innerHTML = "here"
+                //document.getElementById("providedDate").innerHTML = obj.receiver.name;
+                //document.getElementById("details").display = "block";
+                console.log( reader.result);
+            };
+
+            reader.readAsText(input.files[0]);
+        }
+        **/
+    }
+
+        var scrolly = function(e) {
         e.preventDefault();
         var target = this.hash;
         var $target = $(target);
@@ -618,101 +623,168 @@ button:hover {
         });
     }
 
-    var init = function() {
+    var inits = function() {
         burger.addEventListener('click', openMenu, false);
         window.addEventListener('scroll', scrollFx, false);
         window.addEventListener('load', scrollFx, false);
         $('a[href^="#"]').on('click', scrolly);
     };
 
-    doc.on('ready', init);
-    //# sourceURL=pen.js
+    doc.on('ready', inits);
 
-    function adjust_textarea(h) {
-        h.style.height = "20px";
-        h.style.height = (h.scrollHeight) + "px";
-    }
+    var CertificateHash;
+    function encryptFile( ){
+        try {
 
-    function uploadToIpfs() {
+            const reader = new FileReader();
 
-        const ipfs = window.IpfsApi('localhost', 5001); // Connect to IPFS
-        const buf = buffer.Buffer(encrypted); // Convert data into buffer
-        ipfs.files.add(buf, (err, result) => { // Upload buffer to IPFS
-            if (err) {
-                console.error(err);
-                return;
-            }
-            let url = `https://ipfs.io/ipfs/${result[0].hash}`;
-            console.log(`Url --> ${url}`);
-        })
-    }
-
-    function upload(input) {
-        if (input.files && input.files[0]) {
-            var reader = new FileReader();
-
-            reader.onload = function(e) {
-                $('#blah')
-                    .attr('src', e.target.result)
-                    .width(400)
-                    .height(200);
+            reader.onload = function() {
+                var publicKey = forge.pki.publicKeyFromPem( document.getElementById("publicKeyRecepient").value);
+                // var plaintextBuffer = forge.util.createBuffer(rsaMessage.val(), 'utf8'); <-- old
+                var plaintextBytes = forge.util.encodeUtf8( reader.result);
+        
+                var encryptedBytes = publicKey.encrypt(plaintextBytes);
+                console.log(forge.util.encode64(encryptedBytes));
+                document.getElementById("encert").value = forge.util.encode64(encryptedBytes);
             };
-
-            reader.readAsDataURL(input.files[0]);
+            const photo = document.getElementById("file-input");
+            reader.readAsText(photo.files[0]); // Read Provided File
+        }
+        catch (e) {
+            console.log(e);
+            alert("cannot encrypt");
         }
     }
 
-    function viewCertificate() {
-        console.log("View certificate call");
-        getPageContentFromUrl("http://127.0.0.1:8080/ipfs/" + document.getElementById("certificatehash").value);
-
-        console.log("getting html page content");
-        decryptFile();
-
-    }
-
-    function encryptFile() {
+    
+    function fileHashing() {
         const reader = new FileReader();
         //function executed when reader finish loading file
+        let debased, decoded;
         reader.onload = function() {
-            // Use the CryptoJS library and the AES to encrypt contents of the file
 
-            encrypted = CryptoJS.AES.encrypt(reader.result, "Helloall").toString();
-            console.log("encryption Done");
-
+            var md = forge.md.sha256.create();
+            md.update(reader.result);
+            console.log(md.digest().toHex());
+            CertificateHash = String(md.digest().toHex());
         };
         const photo = document.getElementById("file-input");
-        reader.readAsDataURL(photo.files[0]); // Read Provided File
+        reader.readAsText(photo.files[0]); // Read Provided File
     }
 
-    function decryptFile() {
-        // Use the CryptoJS library and the AES to decrypt contents of the file
+    function uploadToIpfs() {
+         fileHashing();
+        const ipfs = window.IpfsApi('localhost', 5001); // Connect to IPFS
+        console.log( document.getElementById("encert").value);
+        const buf = buffer.Buffer( document.getElementById("encert").value); // Convert data into buffer
+        ipfs.files.add(buf, (err, result) => { // Upload buffer to IPFS
+          if(err) {
+            console.error(err);
+            return
+          }
+          let url = `https://ipfs.io/ipfs/${result[0].hash}`;
+          let url1 = `http://127.0.0.1:8080/ipfs/${result[0].hash}`;
+          console.log(`Url --> ${url}`);
+          console.log(`Url --> ${url1}`);
+          document.getElementById("url").innerHTML= url;
+          document.getElementById("url").href= url;
+          //document.getElementById("output").src = url;
+        })
+      }
+        
+        var enCert;
+    
 
-        var decrypted = CryptoJS.AES.decrypt(document.getElementById("out").innerHTML, "Helloall").toString(CryptoJS.enc.Latin1);
-        console.log("decryption Done");
-         $('#certificate-display')
-                    .attr('src', decrypted)
-                    .width(400)
-                    .height(200);
+    function httpGet(theUrl)
+    {
+        var xmlHttp = null;
+
+        xmlHttp = new XMLHttpRequest();
+        xmlHttp.open( "GET", theUrl, false );
+        xmlHttp.send( null );
+        return xmlHttp.responseText;
     }
 
-    function getPageContentFromUrl(url) {
-        var xhttp = new XMLHttpRequest();
-        xhttp.onreadystatechange = function() {
-            if (this.readyState == 4 && this.status == 200) {
-                document.getElementById("out").innerHTML = this.responseText;
-            }
-        };
-        xhttp.open("GET", url, true);
-        xhttp.send();
+
+     function decrypt(){
+        try {
+
+            var privateKey = forge.pki.privateKeyFromPem(document.getElementById("privateKeyRecepient").value);
+            var ctBytes = forge.util.decode64( encert);
+            
+            var plaintextBytes = privateKey.decrypt(ctBytes);
+            // rsaMessage.val(plaintextBytes.toString('utf8')); <-- old
+            console.log(forge.util.decodeUtf8(plaintextBytes));
+             document.getElementById("certificate-display").innerHTML =  forge.util.decodeUtf8(plaintextBytes);
+
+           // document.getElementById("download").href = 'data:attachment/text,' + forge.util.decodeUtf8(plaintextBytes);
+           // document.getElementById("download").download = "certificate.json";
+
+        }
+        catch (e) {
+            console.log(e);
+            alert("cannot decrypt");
+        }
     }
 
-    function copyContent() {
-        var copyText = document.getElementById("");
-        copyText.select();
-        document.execCommand("copy");
+
+    
+
+    
+
+    function viewCertificate(){
+        encert = httpGet( "http://127.0.0.1:8080/ipfs/" + document.getElementById("certificatehash").value);
+        decrypt();
     }
+
+   
+
+    web3 = new Web3( new Web3.providers.HttpProvider("http://127.0.0.1:7545"));
+    var abi = [{"anonymous": false,"inputs": [{"indexed": false,"name": "certHash","type": "string"},{"indexed": false,"name": "owner","type": "address"},{"indexed": false,"name": "provider","type": "address"}],"name": "cerfificateCreated","type": "event"},{"anonymous": false,"inputs": [{"indexed": false,"name": "stat","type": "string"}],"name": "certificateRevoked","type": "event"},{"constant": false,"inputs": [{"name": "_hash","type": "string"},{"name": "_owner","type": "address"},{"name": "_enryptedHash","type": "string"}],"name": "createCertificate","outputs": [],"payable": false,"stateMutability": "nonpayable","type": "function"},{"constant": false,"inputs": [{"name": "_hash","type": "string"}],"name": "revokeCertificate","outputs": [],"payable": false,"stateMutability": "nonpayable","type": "function"},{"constant": true,"inputs": [{"name": "_hash","type": "string"}],"name": "getCertificateDetails","outputs": [{"name": "","type": "string"}],"payable": false,"stateMutability": "view","type": "function"},{"constant": true,"inputs": [],"name": "getOwnerCertificates","outputs": [{"name": "","type": "string[]"}],"payable": false,"stateMutability": "view","type": "function"},{"constant": true,"inputs": [],"name": "getProviderCertificates","outputs": [{"name": "","type": "string[]"}],"payable": false,"stateMutability": "view","type": "function"}];
+    var ContractAddress = "0xa8e01950db92ca94e7cc7e73a42cd915f82ee8ec";
+
+    async function init(){
+          BlockVerifier = await new web3.eth.Contract(abi, ContractAddress);
+          var accounts = await web3.eth.getAccounts();
+          web3.eth.defaultAccount = accounts[3];
+        }
+
+    init();
+
+
+    async function registerCertificate(){
+        let owner = document.getElementById("recipientAddress").value;;
+        let encryptedhash = "QmZsUPtto9CTruxDdDeg2pCaBG4tADQ83mcb72ppo5orJE";
+        console.log("hash" + CertificateHash);
+        console.log( web3.eth.defaultAccount);
+        //console.log( owner);
+        console.log( encryptedhash);
+        BlockVerifier.methods.createCertificate( hash, "0x0b95455e4c9122b5b858a267d85f0ba344947550", encryptedhash).send({from: web3.eth.defaultAccount, gas: 3000000}).on('receipt', function(receipt){
+          //document.getElementById('emit').innerHTML = "sucess";
+          console.log( "sucess");
+        }).on('error', function(error){
+          //document.getElementById('emit').innerHTML = error;
+          console.log( error);
+        });
+      }
+
+
+      async function checkCertificate(){
+        let certificateHash = CertificateHash;
+        BlockVerifier.methods.getCertificateDetails( certificateHash).call().then( function(result){
+          console.log( result);
+          document.getElementById("certStatus").innerHTML = result;
+        });
+    }
+   
+
+    
+  
+    
+     
     </script>
+    <script
+    src="https://cdn.jsdelivr.net/npm/node-forge@0.7.0/dist/forge.min.js"></script>
     <script src="css_reload-5619dc0905a68b2e6298901de54f73cefe4e079f65a7540685.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/aes.js"></script>
     <script src="https://wzrd.in/standalone/buffer"></script>
