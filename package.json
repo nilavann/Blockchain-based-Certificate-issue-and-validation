@@ -1,9 +1,7 @@
 {
-  "name": "Blockchain-based-Certificate-issue-and-validation",
+  "name": "vertical-layout-with-navigation",
   "version": "1.0.0",
   "main": "index.js",
-  "repository": "https://github.com/nilavann/Blockchain-based-Certificate-issue-and-validation.git",
-  "author": "nilavann <nalasivam1997@gmail.com>",
   "license": "MIT",
   "dependencies": {
     "lite-server": "^2.4.0"
